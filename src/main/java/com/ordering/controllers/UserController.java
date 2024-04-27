@@ -1,5 +1,6 @@
 package com.ordering.controllers;
 
+import com.ordering.documents.User;
 import com.ordering.dto.UserDto;
 import com.ordering.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,23 @@ private UserService userService;
 
     @GetMapping()
     public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.ACCEPTED);
     }
-
-   /* @PostMapping()
-    public ResponseEntity<?> createUser(@RequestBody UserDto user) {
-        UserDto createdUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-    }*/
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable String id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.ACCEPTED);
+    }
+    @PostMapping("")
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.createUser(user),HttpStatus.CREATED);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
+        return new ResponseEntity<>(userService.updateUser(id,user),HttpStatus.ACCEPTED);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.ACCEPTED);
+    }
 
 }
