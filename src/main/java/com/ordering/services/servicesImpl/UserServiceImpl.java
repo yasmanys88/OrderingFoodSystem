@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
         this.userRepo=userRepo;
 
     }
+
     @Override
     public List<?> getAllUsers() {
         List<User> users = userRepo.findAll();
