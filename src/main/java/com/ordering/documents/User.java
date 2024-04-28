@@ -1,5 +1,6 @@
 package com.ordering.documents;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
     @Id
     private String id;
+    @NotNull
     private String name;
     private String email;
     private String deliveryAddress;
