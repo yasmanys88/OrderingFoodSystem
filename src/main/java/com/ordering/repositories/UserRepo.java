@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface UserRepo extends MongoRepository<User, String> {
-    User findByName(String name);
-    boolean existsByName(String name);
-    void deleteByName(String name);
+    User findByEmail(String email);
+    boolean existsByEmail(String email);
+    void deleteByEmail(String email);
 }

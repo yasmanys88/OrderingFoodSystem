@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +19,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(UserRepo userRepo){
         this.userRepo=userRepo;
-
     }
 
     @Override
@@ -37,26 +33,31 @@ public class UserServiceImpl implements UserService {
         return this.convertToDTO(userRepo.save(this.convertToDocument(user)));
     }
     @Override
-    public String deleteUserByName(String name) {
-        if (!userRepo.existsByName(name)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + name);
+    public String deleteUserByEmail(String email) {
+        if (!userRepo.existsByEmail(email)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with email: " + email);
         }
-        userRepo.deleteByName(name);
-        return "User with id: " + name +" was deleted";
+        userRepo.deleteByEmail(email);
+        return "User with email: " + email +" was deleted";
     }
     @Override
     public UserDto updateUser(UserDto updatedUser) {
 
-        if (!userRepo.existsByName(updatedUser.getName())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + updatedUser.getName());
+        if (!userRepo.existsByEmail(updatedUser.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with email: " + updatedUser.getEmail());
         }
-        return this.convertToDTO(userRepo.save(this.convertToDocument(updatedUser)));
+        User userDb= userRepo.findByEmail(updatedUser.getEmail());
+        userDb.setDeliveryAddress(updatedUser.getDeliveryAddress());
+        userDb.setEmail(updatedUser.getEmail());
+        userDb.setName(updatedUser.getName());
+        return this.convertToDTO(userRepo.save(userDb));
     }
-    public UserDto getUserByName(String name) {
-        if (!userRepo.existsByName(name)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + name);
+    @Override
+    public UserDto getUserByEmail(String email) {
+        if (!userRepo.existsByEmail(email)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with email: " + email);
         }
-        return this.convertToDTO(userRepo.findByName(name));
+        return this.convertToDTO(userRepo.findByEmail(email));
     }
     private UserDto convertToDTO(User user) {
         ModelMapper mapper= new ModelMapper();

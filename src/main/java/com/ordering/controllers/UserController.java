@@ -3,6 +3,7 @@ package com.ordering.controllers;
 import com.ordering.documents.User;
 import com.ordering.dto.UserDto;
 import com.ordering.services.UserService;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ private UserService userService;
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String name) {
-        return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getUserById(@PathVariable String email) {
+        return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
     }
     @PostMapping("")
     public ResponseEntity<?> createUser(@RequestBody UserDto user) {
@@ -33,9 +34,9 @@ private UserService userService;
     public ResponseEntity<?> updateUser(@RequestBody UserDto user) {
         return new ResponseEntity<>(userService.updateUser(user),HttpStatus.OK);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String name) {
-        return new ResponseEntity<>(userService.deleteUserByName(name),HttpStatus.OK);
+    @DeleteMapping("/{email}")
+    public ResponseEntity<?> deleteUser(@PathVariable String email) {
+        return new ResponseEntity<>(userService.deleteUserByEmail(email),HttpStatus.OK);
     }
 
 }

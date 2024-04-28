@@ -11,7 +11,7 @@ public interface UserService {
     List<?> getAllUsers();
     UserDto createUser(UserDto user);
     UserDto updateUser(UserDto user);
-    String deleteUserByName(String name);
-    UserDto getUserByName(String name);
+    String deleteUserByEmail(String email);
+    UserDto getUserByEmail(String email);
 
 }
