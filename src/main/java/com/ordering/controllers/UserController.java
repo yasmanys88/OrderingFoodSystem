@@ -1,9 +1,7 @@
 package com.ordering.controllers;
 
-import com.ordering.documents.User;
 import com.ordering.dto.UserDto;
 import com.ordering.services.UserService;
-import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
