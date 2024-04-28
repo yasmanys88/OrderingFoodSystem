@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface UserRepo extends MongoRepository<User, String> {
     User findByName(String name);
+    boolean existsByName(String name);
+    void deleteByName(String name);
 }

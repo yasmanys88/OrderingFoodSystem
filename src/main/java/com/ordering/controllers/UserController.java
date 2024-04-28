@@ -22,20 +22,20 @@ private UserService userService;
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    public ResponseEntity<?> getUserById(@PathVariable String name) {
+        return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
     }
     @PostMapping("")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody UserDto user) {
         return new ResponseEntity<>(userService.createUser(user),HttpStatus.CREATED);
     }
     @PutMapping("")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
+    public ResponseEntity<?> updateUser(@RequestBody UserDto user) {
         return new ResponseEntity<>(userService.updateUser(user),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
-        return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.OK);
+    public ResponseEntity<?> deleteUser(@PathVariable String name) {
+        return new ResponseEntity<>(userService.deleteUserByName(name),HttpStatus.OK);
     }
 
 }

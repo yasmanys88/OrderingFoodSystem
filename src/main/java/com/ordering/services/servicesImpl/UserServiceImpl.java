@@ -33,35 +33,38 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
     @Override
-    public UserDto createUser(User user) {
-        return this.convertToDTO(userRepo.save(user));
+    public UserDto createUser(UserDto user) {
+        return this.convertToDTO(userRepo.save(this.convertToDocument(user)));
     }
     @Override
-    public String deleteUserById(String id) {
-        if (!userRepo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+    public String deleteUserByName(String name) {
+        if (!userRepo.existsByName(name)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + name);
         }
-        userRepo.deleteById(id);
-        return "User with id: " + id +" was deleted";
+        userRepo.deleteByName(name);
+        return "User with id: " + name +" was deleted";
     }
     @Override
-    public UserDto updateUser(User updatedUser) {
+    public UserDto updateUser(UserDto updatedUser) {
 
-        if (!userRepo.existsById(updatedUser.getId())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + updatedUser.getId());
+        if (!userRepo.existsByName(updatedUser.getName())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + updatedUser.getName());
         }
-        updatedUser.setId(updatedUser.getId());
-        return this.convertToDTO(userRepo.save(updatedUser));
+        return this.convertToDTO(userRepo.save(this.convertToDocument(updatedUser)));
     }
-    public UserDto getUserById(String id) {
-        if (!userRepo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+    public UserDto getUserByName(String name) {
+        if (!userRepo.existsByName(name)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + name);
         }
-        return this.convertToDTO(userRepo.findById(id).get());
+        return this.convertToDTO(userRepo.findByName(name));
     }
     private UserDto convertToDTO(User user) {
         ModelMapper mapper= new ModelMapper();
      return mapper.map(user,UserDto.class);
+    }
+    private User convertToDocument(UserDto user) {
+        ModelMapper mapper= new ModelMapper();
+        return mapper.map(user,User.class);
     }
 
 }
