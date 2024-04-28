@@ -19,23 +19,23 @@ private UserService userService;
 
     @GetMapping()
     public ResponseEntity<?> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable String id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
     @PostMapping("")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.createUser(user),HttpStatus.CREATED);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
-        return new ResponseEntity<>(userService.updateUser(id,user),HttpStatus.ACCEPTED);
+    @PutMapping("")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.updateUser(user),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
-        return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.OK);
     }
 
 }

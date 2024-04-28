@@ -45,11 +45,12 @@ public class UserServiceImpl implements UserService {
         return "User with id: " + id +" was deleted";
     }
     @Override
-    public UserDto updateUser(String id, User updatedUser) {
-        if (!userRepo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+    public UserDto updateUser(User updatedUser) {
+
+        if (!userRepo.existsById(updatedUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + updatedUser.getId());
         }
-        updatedUser.setId(id);
+        updatedUser.setId(updatedUser.getId());
         return this.convertToDTO(userRepo.save(updatedUser));
     }
     public UserDto getUserById(String id) {
