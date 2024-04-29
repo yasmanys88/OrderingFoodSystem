@@ -17,7 +17,6 @@ public class UserDto {
     @NotBlank(message = "Name may not be blank")
     private String name;
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-    @NotEmpty(message = "Email cannot be empty")
     private String email;
     private String deliveryAddress;
 
