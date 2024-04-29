@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<?> deleteUser(@Valid @PathVariable String email,BindingResult bindingResult) {
-        if (bindingResult.hasErrors())return errorValidationComponent.validationErrors(bindingResult);
+    public ResponseEntity<?> deleteUser(@Valid @PathVariable String email, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
         log.info("Deleting user with email: " + email);
         return new ResponseEntity<>(userService.deleteUserByEmail(email), HttpStatus.OK);
     }

@@ -1,9 +1,9 @@
 package com.ordering.dto;
 
-import com.ordering.documents.User;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,7 @@ public class UserDto {
     private String name;
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
+    @NotNull(message = "Delivery Address may not be null")
     private String deliveryAddress;
 
 }
