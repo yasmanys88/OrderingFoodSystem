@@ -19,7 +19,7 @@ public class UserController {
     ErrorValidationComponent errorValidationComponent;
 
     @Autowired
-    public UserController(UserService userService, ErrorValidationComponent errorValidationComponent) {
+    UserController(UserService userService, ErrorValidationComponent errorValidationComponent) {
         this.userService = userService;
         this.errorValidationComponent = errorValidationComponent;
     }
