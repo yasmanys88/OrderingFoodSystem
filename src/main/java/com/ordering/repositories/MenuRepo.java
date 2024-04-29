@@ -5,4 +5,9 @@ import com.ordering.documents.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface MenuRepo extends MongoRepository<Menu, String> {
+    Menu findByName(String name);
+
+    boolean existsByName(String name);
+
+    void deleteByName(String name);
 }
