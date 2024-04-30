@@ -25,7 +25,7 @@ public class MenuController {
     }
     @GetMapping
     public ResponseEntity<?> getAllMenu(){
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return new ResponseEntity<>(menuService.getAllMenus(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
@@ -50,9 +50,9 @@ public class MenuController {
     }
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteUser(@Valid @PathVariable String name, BindingResult bindingResult) {
+    public ResponseEntity<?> deleteMenu(@Valid @PathVariable String name, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
-        log.info("Deleting user with email: " + name);
+        log.info("Deleting menu with name: " + name);
         return new ResponseEntity<>(menuService.deleteMenuByName(name), HttpStatus.OK);
     }
 
