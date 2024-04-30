@@ -16,9 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Order {
     @Id
     private String id;
-    private String user_id;
-    private String restaurant_id;
-    private String menu_id;
+    private String user_email;
+    private String restaurant_name;
+    private String menu_name;
     private Order_Status status;
     private Boolean availability_Status;
 }

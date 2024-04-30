@@ -35,7 +35,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuDto createMenu(MenuDto menu) {
-        log.info("Converting MenuDTO to Menu format and creating user");
+        log.info("Converting MenuDTO to Menu format and creating Menu");
         return this.convertToDTO(menuRepo.save(this.convertToDocument(menu)));
     }
 
