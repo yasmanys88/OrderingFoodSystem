@@ -23,14 +23,14 @@ public class MenuController {
         this.menuService = menuService;
         this.errorValidationComponent = errorValidationComponent;
     }
+
     @GetMapping
-    public ResponseEntity<?> getAllMenu(){
+    public ResponseEntity<?> getAllMenu() {
         return new ResponseEntity<>(menuService.getAllMenus(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<?> getMenuByEmail(@Valid @PathVariable String name, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
+    public ResponseEntity<?> getMenuByName(@PathVariable String name) {
         log.info("Menu Search by Name: " + name);
         return new ResponseEntity<>(menuService.getMenuByName(name), HttpStatus.OK);
     }
@@ -50,8 +50,7 @@ public class MenuController {
     }
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteMenu(@Valid @PathVariable String name, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
+    public ResponseEntity<?> deleteMenu(@PathVariable String name) {
         log.info("Deleting menu with name: " + name);
         return new ResponseEntity<>(menuService.deleteMenuByName(name), HttpStatus.OK);
     }

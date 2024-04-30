@@ -4,6 +4,8 @@ import com.ordering.dto.UserDto;
 import com.ordering.services.UserService;
 import com.ordering.validations.ErrorValidationComponent;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,8 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<?> getUserByEmail(@Valid @PathVariable String email, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
         log.info("User Search by Email: " + email);
         return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
     }
@@ -52,8 +53,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<?> deleteUser(@Valid @PathVariable String email, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
+    public ResponseEntity<?> deleteUser(@PathVariable String email) {
         log.info("Deleting user with email: " + email);
         return new ResponseEntity<>(userService.deleteUserByEmail(email), HttpStatus.OK);
     }
