@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto updatedUser) {
+        if (!userRepo.existsByEmail(updatedUser.getEmail())) throw new UserNotFoundException("User not found with email "+ updatedUser.getEmail());
         User userDb = userRepo.findByEmail(updatedUser.getEmail());
         log.info("Updating user fields");
         userDb.setDeliveryAddress(updatedUser.getDeliveryAddress());

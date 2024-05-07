@@ -37,9 +37,7 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
         log.info("User Search by Email: " + email);
-        ResponseEntity.ok().build();
-        return ResponseEntity.ok(userService.getUserByEmail(email));
-       // return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -58,7 +56,6 @@ public class UserController {
 
     @DeleteMapping("/{email}")
     public ResponseEntity<?> deleteUser(@PathVariable String email){
-
         userService.deleteUserByEmail(email);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
