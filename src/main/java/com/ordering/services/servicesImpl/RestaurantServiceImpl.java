@@ -26,7 +26,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<?> getAllRestaurant() {
+    public List<RestaurantDto> getAllRestaurant() {
         List<Restaurant> restaurantList = restaurantRepo.findAll();
         log.info("Converting Restaurant  List to DTO format");
         return restaurantList.stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -56,7 +56,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setName(restaurantDto.getName());
         restaurant.setAddress(restaurantDto.getAddress());
         restaurant.setContact_info(restaurantDto.getContact_info());
-        restaurant.setMenu_name(restaurantDto.getMenu_name());
+        restaurant.setMenu(restaurantDto.getMenu());
         return this.convertToDTO(restaurantRepo.save(restaurant));
     }
 

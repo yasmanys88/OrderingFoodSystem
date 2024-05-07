@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     UserService userService;
     ErrorValidationComponent errorValidationComponent;
+
 
     @Autowired
     UserController(UserService userService, ErrorValidationComponent errorValidationComponent) {
@@ -35,7 +37,9 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
         log.info("User Search by Email: " + email);
-        return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
+        ResponseEntity.ok().build();
+        return ResponseEntity.ok(userService.getUserByEmail(email));
+       // return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -53,9 +57,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<?> deleteUser(@PathVariable String email) {
-        log.info("Deleting user with email: " + email);
-        return new ResponseEntity<>(userService.deleteUserByEmail(email), HttpStatus.OK);
+    public ResponseEntity<?> deleteUser(@PathVariable String email){
+
+        userService.deleteUserByEmail(email);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
 }

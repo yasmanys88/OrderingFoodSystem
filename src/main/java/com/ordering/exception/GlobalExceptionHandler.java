@@ -6,34 +6,27 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errorMap = new HashMap<>();
-        for (FieldError error : ex.getFieldErrors()) {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-        }
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(NullPointerException.class)
-    public  ResponseEntity<?> handleNullPointerException(NullPointerException nullPointerException) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error", nullPointerException.getMessage());
-        return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public  ResponseEntity<?> handleException(Exception exception) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error", exception.getMessage());
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+    public final  ResponseEntity<?> handleAllException(Exception exception, WebRequest webRequest){
+        ExceptionDetails exceptionDetails= new ExceptionDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(true));
+        return new ResponseEntity<>(exceptionDetails,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    public final  ResponseEntity<?> handleUserNotFoundException(Exception exception, WebRequest webRequest){
+        ExceptionDetails exceptionDetails= new ExceptionDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(true));
+        return new ResponseEntity<>(exceptionDetails,HttpStatus.NOT_FOUND);
+    }
+
 
 }

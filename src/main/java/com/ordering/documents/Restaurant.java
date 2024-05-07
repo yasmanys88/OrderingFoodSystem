@@ -1,5 +1,6 @@
 package com.ordering.documents;
 
+import com.ordering.dto.MenuDto;
 import com.ordering.utils.Order_Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class Restaurant {
     @NotBlank(message = "Contact Information of Restaurant may not be blank")
     private String contact_info;
 
-    @NotNull(message = "Menu list in the restaurant cannot be null")
-    private List<@NotBlank(message = "Name of Menu may not be blank") String> menu_name;
+   @NotNull(message = "Menu in the restaurant cannot be null")
+   @Field("menu")
+   private MenuDto menu;
 }

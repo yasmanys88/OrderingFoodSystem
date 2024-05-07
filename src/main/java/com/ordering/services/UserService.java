@@ -12,9 +12,9 @@ public interface UserService {
 
     UserDto createUser(UserDto user);
 
-    UserDto updateUser(UserDto user);
+    UserDto updateUser(UserDto user) ;
 
-    String deleteUserByEmail(String email);
+    void deleteUserByEmail(String email);
 
     UserDto getUserByEmail(String email);
 
