@@ -70,10 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByEmail(String email) {
-        if (!userRepo.existsByEmail(email)) {
-            log.error("User not found with email: " + email);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with email: " + email);
-        }
+        if (!userRepo.existsByEmail(email)) throw new UserNotFoundException("User not found with email "+ email);
         log.info("Looking for user information with email: " + email);
         return this.convertToDTO(userRepo.findByEmail(email));
     }
