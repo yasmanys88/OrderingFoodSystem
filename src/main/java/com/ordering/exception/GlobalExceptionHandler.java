@@ -28,5 +28,4 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionDetails,HttpStatus.NOT_FOUND);
     }
 
-
 }
