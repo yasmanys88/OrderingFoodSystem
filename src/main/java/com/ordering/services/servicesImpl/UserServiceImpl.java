@@ -2,20 +2,15 @@ package com.ordering.services.servicesImpl;
 
 import com.ordering.documents.User;
 import com.ordering.dto.UserDto;
-import com.ordering.exception.ExceptionDetails;
-import com.ordering.exception.GlobalExceptionHandler;
-import com.ordering.exception.UserNotFoundException;
+import com.ordering.exception.NotFoundException;
 import com.ordering.repositories.UserRepo;
 import com.ordering.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,26 +46,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserByEmail(String email) {
-        if (!userRepo.existsByEmail(email)) throw new UserNotFoundException("User not found with email "+ email);
+        if (!userRepo.existsByEmail(email)) throw new NotFoundException("User not found with email "+ email);
         userRepo.deleteByEmail(email);
         log.info("Deleting user with email: " + email);
     }
 
     @Override
     public UserDto updateUser(UserDto updatedUser) {
-        if (!userRepo.existsByEmail(updatedUser.getEmail())) throw new UserNotFoundException("User not found with email "+ updatedUser.getEmail());
+        if (!userRepo.existsByEmail(updatedUser.getEmail())) throw new NotFoundException("User not found with email "+ updatedUser.getEmail());
         User userDb = userRepo.findByEmail(updatedUser.getEmail());
         log.info("Updating user fields");
         userDb.setDeliveryAddress(updatedUser.getDeliveryAddress());
         userDb.setEmail(updatedUser.getEmail());
         userDb.setName(updatedUser.getName());
-
-        return this.convertToDTO(userRepo.save(userDb));
+        return modelMapper.map(userRepo.save(userDb), UserDto.class);
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
-        if (!userRepo.existsByEmail(email)) throw new UserNotFoundException("User not found with email "+ email);
+        if (!userRepo.existsByEmail(email)) throw new NotFoundException("User not found with email "+ email);
         log.info("Looking for user information with email: " + email);
         return this.convertToDTO(userRepo.findByEmail(email));
     }
