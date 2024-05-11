@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
             List<User> users = userRepo.findAll();
             log.info("Converting users to DTO format");
             return users.stream()
-                    .map(m -> modelMapper.map(m, UserDto.class))
+                    .map(u -> modelMapper.map(u, UserDto.class))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
