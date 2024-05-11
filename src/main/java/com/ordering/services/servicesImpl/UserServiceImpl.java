@@ -21,8 +21,6 @@ public class UserServiceImpl implements UserService {
     UserRepo userRepo;
     ModelMapper modelMapper;
 
-    // GlobalExceptionHandler globalExceptionHandler;
-
     @Autowired
     UserServiceImpl(UserRepo userRepo, ModelMapper modelMapper) {
         this.userRepo = userRepo;
@@ -31,52 +29,64 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<?> getAllUsers() {
-        List<User> users = userRepo.findAll();
-        log.info("Converting users to DTO format");
-        return users.stream()
-                .map(m -> modelMapper.map(m, UserDto.class))
-                .collect(Collectors.toList());
+        try {
+            List<User> users = userRepo.findAll();
+            log.info("Converting users to DTO format");
+            return users.stream()
+                    .map(m -> modelMapper.map(m, UserDto.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        log.info("Converting UserDto to User format and creating user");
-        return modelMapper.map(userRepo.save(modelMapper.map(userDto, User.class)), UserDto.class);
+        try {
+            log.info("Converting UserDto to User format and creating user");
+            return modelMapper.map(userRepo.save(modelMapper.map(userDto, User.class)), UserDto.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void deleteUserByEmail(String email) {
-        if (!userRepo.existsByEmail(email)) throw new NotFoundException("User not found with email "+ email);
-        userRepo.deleteByEmail(email);
-        log.info("Deleting user with email: " + email);
+        if (!userRepo.existsByEmail(email)) throw new NotFoundException("User not found with email " + email);
+        try {
+            log.info("Deleting user with email: " + email);
+            userRepo.deleteByEmail(email);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public UserDto updateUser(UserDto updatedUser) {
-        if (!userRepo.existsByEmail(updatedUser.getEmail())) throw new NotFoundException("User not found with email "+ updatedUser.getEmail());
-        User userDb = userRepo.findByEmail(updatedUser.getEmail());
-        log.info("Updating user fields");
-        userDb.setDeliveryAddress(updatedUser.getDeliveryAddress());
-        userDb.setEmail(updatedUser.getEmail());
-        userDb.setName(updatedUser.getName());
-        return modelMapper.map(userRepo.save(userDb), UserDto.class);
+        if (!userRepo.existsByEmail(updatedUser.getEmail()))
+            throw new NotFoundException("User not found with email " + updatedUser.getEmail());
+        try {
+            User userDb = userRepo.findByEmail(updatedUser.getEmail());
+            log.info("Updating user fields");
+            userDb.setDeliveryAddress(updatedUser.getDeliveryAddress());
+            userDb.setEmail(updatedUser.getEmail());
+            userDb.setName(updatedUser.getName());
+            return modelMapper.map(userRepo.save(userDb), UserDto.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
-        if (!userRepo.existsByEmail(email)) throw new NotFoundException("User not found with email "+ email);
-        log.info("Looking for user information with email: " + email);
-        return this.convertToDTO(userRepo.findByEmail(email));
-    }
-
-    private UserDto convertToDTO(User user) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(user, UserDto.class);
-    }
-
-    private User convertToDocument(UserDto user) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(user, User.class);
+        if (!userRepo.existsByEmail(email)) throw new NotFoundException("User not found with email " + email);
+        try {
+            log.info("Looking for user information with email: " + email);
+            return modelMapper.map(userRepo.findByEmail(email), UserDto.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
