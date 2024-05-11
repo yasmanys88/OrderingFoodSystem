@@ -15,7 +15,7 @@ public interface RestaurantService {
 
     RestaurantDto updateRestaurant(RestaurantDto restaurantDto);
 
-    String deleteRestaurantByName(String name);
+    void deleteRestaurantByName(String name);
 
 
 }

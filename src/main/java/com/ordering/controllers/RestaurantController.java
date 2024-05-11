@@ -39,7 +39,7 @@ public class RestaurantController {
 
     @PostMapping
     public ResponseEntity<?> createRestaurant(@Valid @RequestBody RestaurantDto restaurantDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return  errorValidationComponent.validationErrors(bindingResult);
+        if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
         log.info("Creating Restaurant: " + restaurantDto.getName());
         return new ResponseEntity<>(restaurantService.createRestaurant(restaurantDto), HttpStatus.CREATED);
     }
@@ -53,8 +53,8 @@ public class RestaurantController {
 
     @DeleteMapping("/{name}")
     public ResponseEntity<?> deleteRestaurant(@PathVariable String name) {
-        log.info("Deleting restaurant with name: " + name);
-        return new ResponseEntity<>(restaurantService.deleteRestaurantByName(name), HttpStatus.OK);
+        restaurantService.deleteRestaurantByName(name);
+        return new ResponseEntity<>("Deleting restaurant with name: " + name, HttpStatus.OK);
     }
 
 }

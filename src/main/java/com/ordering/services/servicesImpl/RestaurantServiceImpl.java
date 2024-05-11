@@ -8,9 +8,7 @@ import com.ordering.services.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,10 +18,12 @@ import java.util.stream.Collectors;
 public class RestaurantServiceImpl implements RestaurantService {
 
     RestaurantRepo restaurantRepo;
+    ModelMapper modelMapper;
 
     @Autowired
-    RestaurantServiceImpl(RestaurantRepo restaurantRepo) {
+    RestaurantServiceImpl(RestaurantRepo restaurantRepo, ModelMapper modelMapper) {
         this.restaurantRepo = restaurantRepo;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -31,7 +31,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         try {
             List<Restaurant> restaurantList = restaurantRepo.findAll();
             log.info("Converting Restaurant  List to DTO format");
-            return restaurantList.stream().map(this::convertToDTO).collect(Collectors.toList());
+            return restaurantList.stream()
+                    .map(r -> modelMapper.map(r, RestaurantDto.class))
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -41,7 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public RestaurantDto getRestaurantByName(String name) {
         if (!restaurantRepo.existsByName(name)) throw new NotFoundException("Restaurant not found with name: " + name);
         try {
-            return this.convertToDTO(restaurantRepo.findByName(name));
+            return modelMapper.map(restaurantRepo.findByName(name),RestaurantDto.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +53,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public RestaurantDto createRestaurant(RestaurantDto restaurantDto) {
         try {
             log.info("Converting RestaurantDto to Restaurant format and creating Restaurant");
-            return this.convertToDTO(restaurantRepo.save(this.convertToDocument(restaurantDto)));
+            return modelMapper.map(restaurantRepo.save(modelMapper.map(restaurantDto, Restaurant.class)), RestaurantDto.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -69,32 +71,21 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setAddress(restaurantDto.getAddress());
             restaurant.setContact_info(restaurantDto.getContact_info());
             restaurant.setMenu(restaurantDto.getMenu());
-            return this.convertToDTO(restaurantRepo.save(restaurant));
+            return modelMapper.map(restaurantRepo.save(restaurant), RestaurantDto.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public String deleteRestaurantByName(String name) {
+    public void deleteRestaurantByName(String name) {
         if (!restaurantRepo.existsByName(name)) throw new NotFoundException("Restaurant not found with Name: " + name);
         try {
             restaurantRepo.deleteByName(name);
             log.info("Restaurant with name: " + name + " was deleted");
-            return "Restaurant with name: " + name + " was deleted";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private RestaurantDto convertToDTO(Restaurant restaurant) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(restaurant, RestaurantDto.class);
-    }
-
-    private Restaurant convertToDocument(RestaurantDto restaurantDto) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(restaurantDto, Restaurant.class);
     }
 
 }
