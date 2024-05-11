@@ -51,8 +51,8 @@ public class MenuController {
 
     @DeleteMapping("/{name}")
     public ResponseEntity<?> deleteMenu(@PathVariable String name) {
-        log.info("Deleting menu with name: " + name);
-        return new ResponseEntity<>(menuService.deleteMenuByName(name), HttpStatus.OK);
+        menuService.deleteMenuByName(name);
+        return new ResponseEntity<>("Deleting menu with name: " + name, HttpStatus.OK);
     }
 
 }

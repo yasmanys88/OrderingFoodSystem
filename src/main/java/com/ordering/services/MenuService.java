@@ -11,6 +11,6 @@ public interface MenuService {
     List<?> getAllMenus();
     MenuDto createMenu(MenuDto user);
     MenuDto updateMenu(MenuDto user);
-    String deleteMenuByName(String name);
+    void deleteMenuByName(String name);
     MenuDto getMenuByName(String name);
 }

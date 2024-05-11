@@ -18,25 +18,27 @@ import java.util.stream.Collectors;
 @Service
 public class MenuServiceImpl implements MenuService {
     MenuRepo menuRepo;
+    ModelMapper modelMapper;
 
     @Autowired
-    MenuServiceImpl(MenuRepo menuRepo) {
+    MenuServiceImpl(MenuRepo menuRepo,ModelMapper modelMapper) {
         this.menuRepo = menuRepo;
+        this.modelMapper=modelMapper;
     }
 
     @Override
-    public List<?> getAllMenus() {
+    public List<MenuDto> getAllMenus() {
         List<Menu> menus = menuRepo.findAll();
         log.info("Converting menus to DTO format");
         return menus.stream()
-                .map(this::convertToDTO)
+                .map(m->modelMapper.map(m,MenuDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public MenuDto createMenu(MenuDto menu) {
         log.info("Converting MenuDTO to Menu format and creating Menu");
-        return this.convertToDTO(menuRepo.save(this.convertToDocument(menu)));
+        return modelMapper.map(menuRepo.save(modelMapper.map(menu,Menu.class)), MenuDto.class);
     }
 
     @Override
@@ -51,18 +53,17 @@ public class MenuServiceImpl implements MenuService {
         menu.setDescription(menuDto.getDescription());
         menu.setPrice(menuDto.getPrice());
         menu.setAvailability_Status(menuDto.getAvailability_Status());
-        return this.convertToDTO(menuRepo.save(menu));
+        return modelMapper.map(menuRepo.save(menu), MenuDto.class);
     }
 
     @Override
-    public String deleteMenuByName(String name) {
+    public void deleteMenuByName(String name) {
         if (!menuRepo.existsByName(name)) {
             log.error("Menu not found with name: " + name);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with email: " + name);
         }
         menuRepo.deleteByName(name);
         log.info("Menu with name: " + name + " was deleted");
-        return "Menu with name: " + name + " was deleted";
 
     }
 
@@ -73,17 +74,7 @@ public class MenuServiceImpl implements MenuService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Menu not found with name: " + name);
         }
         log.info("Looking for Menu information with name: " + name);
-        return this.convertToDTO(menuRepo.findByName(name));
+        return modelMapper.map(menuRepo.findByName(name), MenuDto.class);
     }
 
-
-    private MenuDto convertToDTO(Menu menu) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(menu, MenuDto.class);
-    }
-
-    private Menu convertToDocument(MenuDto menu) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(menu, Menu.class);
-    }
 }
