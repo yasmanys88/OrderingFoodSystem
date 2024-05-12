@@ -13,7 +13,7 @@ public interface OrderService {
 
     OrderDto updateOrder(OrderDto orderDto);
 
-    void deleteOrderByNumber(Integer number);
+    void deleteOrderByNumber(String number);
 
-    OrderDto getOrderByNumber(Integer number);
+    OrderDto getOrderByNumber(String number);
 }

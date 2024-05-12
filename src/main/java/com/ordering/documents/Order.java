@@ -21,15 +21,15 @@ public class Order {
 
     @NotBlank(message = "Order Number may not be blank")
     @Indexed(unique = true)
-    private Integer order_number;
+    private String orderNumber;
     @NotBlank(message = "User email may not be blank")
-    private String user_email;
+    private String userEmail;
     @NotBlank(message = "Restaurant  name may not be blank")
-    private String restaurant_name;
+    private String restaurantName;
     @NotBlank(message = "Menu name may not be blank")
-    private String menu_name;
+    private String menuName;
     @NotBlank(message = "Status may not be blank")
     private Order_Status status;
     @NotBlank(message = "Availability Status may not be blank")
-    private Boolean availability_Status;
+    private Boolean availabilityStatus;
 }
