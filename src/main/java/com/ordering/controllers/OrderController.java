@@ -1,6 +1,7 @@
 package com.ordering.controllers;
 
 import com.ordering.dto.OrderDto;
+import com.ordering.dto.OrderDtoId;
 import com.ordering.services.OrderService;
 import com.ordering.validations.ErrorValidationComponent;
 import jakarta.validation.Valid;
@@ -44,7 +45,7 @@ public class OrderController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateOrder(@Valid @RequestBody OrderDto orderDto, BindingResult bindingResult) {
+    public ResponseEntity<?> updateOrder(@Valid @RequestBody OrderDtoId orderDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return errorValidationComponent.validationErrors(bindingResult);
         log.info("Updating order: " + orderDto.getOrderNumber());
         return new ResponseEntity<>(orderService.updateOrder(orderDto), HttpStatus.OK);

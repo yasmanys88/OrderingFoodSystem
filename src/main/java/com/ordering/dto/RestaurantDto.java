@@ -28,5 +28,5 @@ public class RestaurantDto {
     private String contact_info;
 
     @NotNull(message = "Menu in the restaurant cannot be null")
-    private MenuDto menu;
+    private List<Menu> menu;
 }

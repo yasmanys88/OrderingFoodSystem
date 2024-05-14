@@ -22,7 +22,7 @@ public class User {
     @Id
     private String id;
 
-    @NotBlank(message = "Name may not be blank")
+    @NotNull(message = "Name may not be blank")
     private String name;
 
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")

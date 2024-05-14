@@ -2,6 +2,7 @@ package com.ordering.services.servicesImpl;
 
 import com.ordering.documents.Order;
 import com.ordering.dto.OrderDto;
+import com.ordering.dto.OrderDtoId;
 import com.ordering.exception.NotFoundException;
 import com.ordering.repositories.MenuRepo;
 import com.ordering.repositories.OrderRepo;
@@ -69,18 +70,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateOrder(OrderDto orderDto) {
-        if (!orderRepo.existsByOrderNumber(orderDto.getOrderNumber()))
+    public OrderDto updateOrder(OrderDtoId orderDto) {
+        //variablee find by Optional
+        Order order= orderRepo.findByOrderNumber(orderDto.getOrderNumber());
+        if (order==null)
             throw new NotFoundException("Order not found with number: " + orderDto.getOrderNumber());
-        OrderExceptionMethod(orderDto);
         try {
-            Order order = orderRepo.findByOrderNumber(orderDto.getOrderNumber());
-            order.setUserEmail(orderDto.getUserEmail());
-            order.setRestaurantName(orderDto.getRestaurantName());
-            order.setMenuName(orderDto.getMenuName());
-            order.setStatus(orderDto.getStatus());
-            order.setAvailabilityStatus(orderDto.getAvailabilityStatus());
-            return modelMapper.map(orderRepo.save(order), OrderDto.class);
+            orderDto.setId(order.getId());
+            //Hacerlo como un Optional java8
+            return modelMapper.map(orderRepo.save(modelMapper.map(orderDto, Order.class)), OrderDto.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

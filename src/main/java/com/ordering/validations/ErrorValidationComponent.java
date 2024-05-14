@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class ErrorValidationComponent {
 
-    public ResponseEntity<?> validationErrors(BindingResult result) {
+    public ResponseEntity<Map<String,String>> validationErrors(BindingResult result) {
         Map<String, String> errorMap = new HashMap<>();
         for (FieldError error : result.getFieldErrors()) {
             errorMap.put(error.getField(),error.getDefaultMessage());

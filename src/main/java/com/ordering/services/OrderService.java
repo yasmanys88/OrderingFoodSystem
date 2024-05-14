@@ -2,6 +2,7 @@ package com.ordering.services;
 
 import com.ordering.dto.MenuDto;
 import com.ordering.dto.OrderDto;
+import com.ordering.dto.OrderDtoId;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface OrderService {
 
     OrderDto createOrder(OrderDto orderDto);
 
-    OrderDto updateOrder(OrderDto orderDto);
+    OrderDto updateOrder(OrderDtoId orderDto);
 
     void deleteOrderByNumber(String number);
 
